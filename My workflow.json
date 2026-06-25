@@ -1,0 +1,126 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19,
+              "triggerAtMinute": 33
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        -64
+      ],
+      "id": "a4743423-5e8c-4f52-93c2-f572f30b9df8",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "vgayathri0603@gmail.com",
+        "subject": "Hey Ammu...Good Morning..Today's Weather Update",
+        "message": "=Today's Weather for Peabody 🌤️\n\nTemperature: {{$node[\"Get Weather\"].json.main.temp}}°C\nFeels Like: {{$node[\"Get Weather\"].json.main.feels_like}}°C\nCondition: {{$node[\"Get Weather\"].json.weather[0].description}}\nHumidity: {{$node[\"Get Weather\"].json.main.humidity}}%\nWind Speed: {{$node[\"Get Weather\"].json.wind.speed}} m/s",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        592,
+        -64
+      ],
+      "id": "9fa6168f-d896-4bfa-b806-92d71e18deea",
+      "name": "Send a message",
+      "webhookId": "90faf5f5-6cb5-42f8-ada5-ab5081858de8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "q8hjnRb4bZkTUEML",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://ip-api.com/json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        144,
+        -64
+      ],
+      "id": "c9b6c98d-9d04-40f2-be3f-1485197a6fbd",
+      "name": "Get Location"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.openweathermap.org/data/2.5/weather?q={{$node[\"Get Location\"].json.city}}&appid=3c1128128ac370d38f552d0bb509144d&units=metric",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "1e9445b6-5a1b-4a35-8c1e-48d7051eba2b",
+      "name": "Get Weather"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Location": {
+      "main": [
+        [
+          {
+            "node": "Get Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weather": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "28bdc3b0-6aca-4846-a050-c34efe2a173d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afd8329659d4c1a76bf3daa1085ec2e3e121223e067d310e75806cc0593ee3ac"
+  },
+  "nodeGroups": [],
+  "id": "K4DrHJa5is2h5mKs",
+  "tags": []
+}
